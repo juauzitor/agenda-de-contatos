@@ -23,6 +23,7 @@ public class DAO {
 			return null;
 		}
 	}
+	/** pode ficar comentado pois era só para teste
 	// teste de conexão
 	public void testeConexao() {
 		try {
@@ -32,5 +33,5 @@ public class DAO {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-	}
+	}**/
 }

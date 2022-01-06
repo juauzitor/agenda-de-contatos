@@ -13,26 +13,39 @@ import model.DAO;
  */
 //@WebServlet(urlPatterns = {"/Controller", "/main"}) Foi o que o professor colocou entretanto não funcionou
 //@WebServlet(urlPatterns = {"/Controller"}) Aparentemente o problema a a requisição do Controller
-@WebServlet(urlPatterns = {"/main"}) //Apenas chamando a main vai.
+@WebServlet(urlPatterns = { "/main" }) // Apenas chamando a main vai.
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	DAO dao = new DAO();
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public Controller() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-		// teste de conexão
-		dao.testeConexao();
+	public Controller() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		/**
+		 * forma para chamar e testar se a conexão esta correta // teste de conexão
+		 * dao.testeConexao();
+		 **/
+		String action = request.getServletPath();
+		System.out.println(action);
+		if (action.equals("/main")) {
+			contatos(request, response);
+		}
+	}
+
+	// listar contatos
+	protected void contatos(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.sendRedirect("agenda.jsp");
+	}
 }
