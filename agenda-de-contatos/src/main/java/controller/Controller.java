@@ -7,16 +7,18 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import model.DAO;
+import model.JavaBeans;
 
 /**
  * Servlet implementation class Controller
  */
 //@WebServlet(urlPatterns = {"/Controller", "/main"}) Foi o que o professor colocou entretanto não funcionou
 //@WebServlet(urlPatterns = {"/Controller"}) Aparentemente o problema a a requisição do Controller
-@WebServlet(urlPatterns = { "/main" }) // Apenas chamando a main vai.
+@WebServlet(urlPatterns = { "/main", "/insert" }) // Apenas chamando a main vai.
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	DAO dao = new DAO();
+	JavaBeans contato = new JavaBeans();
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -40,6 +42,10 @@ public class Controller extends HttpServlet {
 		System.out.println(action);
 		if (action.equals("/main")) {
 			contatos(request, response);
+		} else if (action.equals("/insert")) {
+			novoContato(request, response);
+		} else {
+			response.sendRedirect("index.html");
 		}
 	}
 
@@ -47,5 +53,23 @@ public class Controller extends HttpServlet {
 	protected void contatos(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.sendRedirect("agenda.jsp");
+	}
+
+	// Novo contatos
+	protected void novoContato(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		/** teste de recebimento do form
+		System.out.println(request.getParameter("nome"));
+		System.out.println(request.getParameter("fone"));
+		System.out.println(request.getParameter("email"));
+		**/
+		//setar as variavels do javabeans
+		contato.setNome(request.getParameter("nome"));
+		contato.setFone(request.getParameter("fone"));
+		contato.setEmail(request.getParameter("email"));
+		// invocar o método de inserirContato passando o objeto contato
+		dao.inserirContato(contato);
+		// redirecionar para o documento agenda.jsp
+		response.sendRedirect("main");
 	}
 }
