@@ -17,7 +17,7 @@ import model.JavaBeans;
  */
 //@WebServlet(urlPatterns = {"/Controller", "/main"}) Foi o que o professor colocou entretanto não funcionou
 //@WebServlet(urlPatterns = {"/Controller"}) Aparentemente o problema a a requisição do Controller
-@WebServlet(urlPatterns = { "/main", "/insert", "/select", "/update" }) // Apenas chamando a main vai.
+@WebServlet(urlPatterns = { "/main", "/insert", "/select", "/update", "/delete" }) // Apenas chamando a main vai.
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	DAO dao = new DAO();
@@ -47,11 +47,12 @@ public class Controller extends HttpServlet {
 			contatos(request, response);
 		} else if (action.equals("/insert")) {
 			novoContato(request, response);
-
 		} else if (action.equals("/select")) {
 			listarContato(request, response);
 		} else if (action.equals("/update")) {
 			editarContato(request, response);
+		} else if (action.equals("/delete")) {
+			removerContato(request, response);
 		} else {
 			response.sendRedirect("index.html");
 		}
@@ -140,4 +141,20 @@ public class Controller extends HttpServlet {
 		// redirecionar para o documento agenda.jsp (atualizando as alterações)
 		response.sendRedirect("main");
 	}
+	
+	//Remover um contato
+	protected void removerContato(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// recebimento da variável idcon
+		String idcon = request.getParameter("idcon");
+		/** testar se o id do contato esta chegando
+		System.out.println(idcon);**/
+		// Setar a variável idcon JavaBeans
+		contato.setIdcon(idcon);
+		// executar o método deletarContato (DAO) passando o objeto contato
+		dao.deletarContato(contato);
+		// redirecionar para o documento agenda.jsp (atualizando as alterações)
+		response.sendRedirect("main");
+	}
+	
 }

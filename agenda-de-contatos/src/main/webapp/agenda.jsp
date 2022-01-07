@@ -41,10 +41,14 @@ for(int i = 0; i < lista.size(); i++){
 					<td><%=lista.get(i).getNome()%></td>
 					<td><%=lista.get(i).getFone()%></td>
 					<td><%=lista.get(i).getEmail()%></td>
-					<td><a href="select?idcon=<%=lista.get(i).getIdcon()%>" class="Botao1">Editar</a>
+					<td>
+						<a href="select?idcon=<%=lista.get(i).getIdcon()%>" class="Botao1">Editar</a>
+						<a href="javascript:confirmar(<%=lista.get(i).getIdcon()%>)" class="Botao2">Excluir</a>
+					</td>
 				</tr>
 			<%}%>
 		</tbody>
 	</table>
+	<script src="scripts/confirmador.js"></script>
 </body>
 </html>

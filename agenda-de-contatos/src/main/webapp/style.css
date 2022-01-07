@@ -25,6 +25,15 @@ h1 {
 	border: 0;
 	cursor: pointer;
 }
+.Botao2 {
+	text-decoration: none;
+	background-color: #d51213;
+	padding: 5px 10px 5px 10px;
+	color: #fff;
+	font-size: 1.2em;
+	font-weight: 700;
+	border-radius: 5px;
+}
 
 .Caixa1 {
 	width: 320px;

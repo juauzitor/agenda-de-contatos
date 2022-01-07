@@ -118,4 +118,19 @@ public class DAO {
 			System.out.println(e);
 		}
 	}
+	
+	/** CRUD DELETE**/
+	// remover o contato
+	public void deletarContato(JavaBeans contato) {
+		String delete = "delete from contatos where idcon=?";
+		try {
+			Connection con = conectar();
+			PreparedStatement pst = con.prepareStatement(delete);
+			pst.setString(1, contato.getIdcon());
+			pst.executeUpdate();
+			con.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
 }
