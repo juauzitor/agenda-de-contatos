@@ -3,6 +3,7 @@
 <%@ page import="model.JavaBeans"%>
 <%@ page import="java.util.ArrayList"%>
 <%
+	@ SuppressWarnings ("unchecked")
 	ArrayList<JavaBeans> lista = (ArrayList<JavaBeans>) request.getAttribute("contatos");
 /** teste para descobrir se os dados estão sendos passados corretamente pela lista
 for(int i = 0; i < lista.size(); i++){
@@ -24,6 +25,7 @@ for(int i = 0; i < lista.size(); i++){
 <body>
 	<h1>Agenda de Contatos</h1>
 	<a href="novo.html" class="Botao1">Novo contato</a>
+	<a href="report" class="Botao2">Relatório</a>
 	<table id="tabela">
 		<thead>
 			<tr>

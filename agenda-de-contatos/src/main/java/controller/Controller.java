@@ -2,6 +2,13 @@ package controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -17,7 +24,8 @@ import model.JavaBeans;
  */
 //@WebServlet(urlPatterns = {"/Controller", "/main"}) Foi o que o professor colocou entretanto não funcionou
 //@WebServlet(urlPatterns = {"/Controller"}) Aparentemente o problema a a requisição do Controller
-@WebServlet(urlPatterns = { "/main", "/insert", "/select", "/update", "/delete" }) // Apenas chamando a main vai.
+@WebServlet(urlPatterns = { "/main", "/insert", "/select", "/update", "/delete", "/report" }) // Apenas chamando a main
+																								// vai.
 public class Controller extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	DAO dao = new DAO();
@@ -53,6 +61,8 @@ public class Controller extends HttpServlet {
 			editarContato(request, response);
 		} else if (action.equals("/delete")) {
 			removerContato(request, response);
+		} else if (action.equals("/report")) {
+			gerarRelatorio(request, response);
 		} else {
 			response.sendRedirect("index.html");
 		}
@@ -141,14 +151,15 @@ public class Controller extends HttpServlet {
 		// redirecionar para o documento agenda.jsp (atualizando as alterações)
 		response.sendRedirect("main");
 	}
-	
-	//Remover um contato
+
+	// Remover um contato
 	protected void removerContato(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// recebimento da variável idcon
 		String idcon = request.getParameter("idcon");
-		/** testar se o id do contato esta chegando
-		System.out.println(idcon);**/
+		/**
+		 * testar se o id do contato esta chegando System.out.println(idcon);
+		 **/
 		// Setar a variável idcon JavaBeans
 		contato.setIdcon(idcon);
 		// executar o método deletarContato (DAO) passando o objeto contato
@@ -156,5 +167,40 @@ public class Controller extends HttpServlet {
 		// redirecionar para o documento agenda.jsp (atualizando as alterações)
 		response.sendRedirect("main");
 	}
-	
+	// gerar relatório em pdf
+	protected void gerarRelatorio(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		//documento pdf
+		Document documento = new Document();
+		try {
+			// criando o documento
+			PdfWriter.getInstance(documento, response.getOutputStream());
+			// abrindo o documento -> conteúdo
+			documento.open();
+			documento.add(new Paragraph("Lista de contatos:"));
+			documento.add(new Paragraph(" "));
+			//criar uma tabela
+			PdfPTable tabela = new PdfPTable(3);
+			//cabeçalho
+			PdfPCell col1 = new PdfPCell(new Paragraph("Nome"));
+			PdfPCell col2 = new PdfPCell(new Paragraph("Fone"));
+			PdfPCell col3 = new PdfPCell(new Paragraph("Email"));
+			tabela.addCell(col1);
+			tabela.addCell(col2);
+			tabela.addCell(col3);	
+			//popular a tabela com os contatos
+			ArrayList<JavaBeans> lista = dao.ListarContatos();
+				for (int i = 0; i < lista.size(); i++) {
+					tabela.addCell(lista.get(i).getNome());
+					tabela.addCell(lista.get(i).getFone());
+					tabela.addCell(lista.get(i).getEmail());
+				}
+			documento.add(tabela);
+			documento.close();
+		} catch (Exception e) {
+			System.out.println(e);
+			documento.close();
+		}
+		
+	}
 }
